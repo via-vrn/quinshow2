@@ -117,7 +117,7 @@ export default function Header() {
         isVisible ? "translate-y-0" : "-translate-y-full"
       } ${
         isScrolled
-          ? "bg-yellow-400/80 backdrop-blur-md shadow-lg"
+          ? "bg-white/70 backdrop-blur-md shadow-lg"
           : "bg-transparent"
       }`}
     >

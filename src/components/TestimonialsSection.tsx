@@ -1,3 +1,7 @@
+"use client";
+
+import { useRef } from "react";
+
 const testimonials = [
   {
     id: 1,
@@ -118,7 +122,7 @@ const testimonials2 = [
 
 function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] }) {
   return (
-    <div className="flex-shrink-0 w-[320px] bg-white rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow mx-2">
+    <div className="flex-shrink-0 w-[320px] bg-white rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow">
       <div className="flex items-center gap-3 mb-3">
         <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-400 rounded-full flex items-center justify-center text-white font-bold">
           {testimonial.name.charAt(0)}
@@ -141,6 +145,19 @@ function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] 
 }
 
 export default function TestimonialsSection() {
+  const row1Ref = useRef<HTMLDivElement>(null);
+  const row2Ref = useRef<HTMLDivElement>(null);
+
+  const scroll = (ref: React.RefObject<HTMLDivElement>, direction: "left" | "right") => {
+    if (ref.current) {
+      const scrollAmount = 340;
+      ref.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <section className="py-4 bg-[#FFF8E7]" id="reviews">
       <div className="max-w-6xl mx-auto px-4">
@@ -170,22 +187,70 @@ export default function TestimonialsSection() {
             </div>
           </div>
 
-          {/* Marquee Row 1 - scrolls left */}
-          <div className="relative mb-4 overflow-hidden">
-            <div className="flex animate-marquee">
-              {[...testimonials, ...testimonials].map((testimonial, index) => (
-                <TestimonialCard key={`row1-${index}`} testimonial={testimonial} />
-              ))}
+          {/* Marquee Row 1 - with navigation */}
+          <div className="relative mb-4 flex items-center gap-4">
+            <button
+              type="button"
+              onClick={() => scroll(row1Ref, "left")}
+              className="shrink-0 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-colors"
+              aria-label="Предыдущие отзывы"
+            >
+              <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <div className="flex-1 overflow-hidden">
+              <div ref={row1Ref} className="flex gap-4 scroll-smooth">
+                {testimonials.map((testimonial) => (
+                  <TestimonialCard key={`row1-${testimonial.id}`} testimonial={testimonial} />
+                ))}
+              </div>
             </div>
+
+            <button
+              type="button"
+              onClick={() => scroll(row1Ref, "right")}
+              className="shrink-0 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-colors"
+              aria-label="Следующие отзывы"
+            >
+              <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
 
-          {/* Marquee Row 2 - scrolls right */}
-          <div className="relative overflow-hidden">
-            <div className="flex animate-marquee-reverse">
-              {[...testimonials2, ...testimonials2].map((testimonial, index) => (
-                <TestimonialCard key={`row2-${index}`} testimonial={testimonial} />
-              ))}
+          {/* Marquee Row 2 - with navigation */}
+          <div className="relative flex items-center gap-4">
+            <button
+              type="button"
+              onClick={() => scroll(row2Ref, "left")}
+              className="shrink-0 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-colors"
+              aria-label="Предыдущие отзывы"
+            >
+              <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <div className="flex-1 overflow-hidden">
+              <div ref={row2Ref} className="flex gap-4 scroll-smooth">
+                {testimonials2.map((testimonial) => (
+                  <TestimonialCard key={`row2-${testimonial.id}`} testimonial={testimonial} />
+                ))}
+              </div>
             </div>
+
+            <button
+              type="button"
+              onClick={() => scroll(row2Ref, "right")}
+              className="shrink-0 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-colors"
+              aria-label="Следующие отзывы"
+            >
+              <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
 
           {/* CTA */}
